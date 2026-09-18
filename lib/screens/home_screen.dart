@@ -1,3 +1,6 @@
+import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart';
+
+import 'package:bmi_app/screens/result_screen.dart';
 import 'package:bmi_app/widgets/gender_widget.dart';
 import 'package:bmi_app/widgets/info_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +8,7 @@ import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   const new({super.key});
+  static String route = "HomeScreen";
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -166,17 +170,41 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
 
-      bottomNavigationBar: MaterialButton(
-        onPressed: () {},
-        color: Color(0xffE83D67),
-        padding: EdgeInsets.symmetric(vertical: 30),
-        child: Text(
-          "Calculate",
-          style: TextStyle(
-            fontSize: 32,
-            fontWeight: .w600,
-            color: Color(0xffFFFFFF),
-          ),
+      bottomNavigationBar: BmiButtomWidget(
+        text: "Calculate",
+        onPressed: () {
+          double calculateBmi = (weight / ((height / 100) * (height / 100)))
+              .roundToDouble();
+          print(calculateBmi);
+          Navigator.of(context)
+              .pushNamed(ResultScreen.route, arguments: calculateBmi);
+        },
+      ),
+    );
+  }
+}
+
+class BmiButtomWidget extends StatelessWidget {
+  const BmiButtomWidget({
+    super.key,
+    required this.text,
+    required this.onPressed,
+  });
+  final String text;
+  final void Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialButton(
+      onPressed: onPressed,
+      color: Color(0xffE83D67),
+      padding: EdgeInsets.symmetric(vertical: 30),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 32,
+          fontWeight: .w600,
+          color: Color(0xffFFFFFF),
         ),
       ),
     );
